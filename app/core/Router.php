@@ -1,42 +1,42 @@
 <?php
 
 class Router {
-    private array $routes = [];
+    public function run() {
+        $url = isset($_GET['url']) ? $_GET['url'] : 'home/index';
+        $url = explode('/', filter_var(rtrim($url, '/'), FILTER_SANITIZE_URL));
 
-    public function __construct() {
-        // Mapeamento de Rotas
-        $this->addRoute('/', 'HomeController', 'index');
-        $this->addRoute('/login', 'AuthController', 'login');
-        $this->addRoute('/dashboard', 'HomeController', 'dashboard');
-        $this->addRoute('/alunos', 'AlunoController', 'index');
-    }
+        // Define o Controller
+        $controllerName = !empty($url[0]) ? ucfirst($url[0]) . 'Controller' : 'HomeController';
+        
+        // Define a Action (método)
+        $action = isset($url[1]) && !empty($url[1]) ? $url[1] : 'index';
 
-    private function addRoute(string $url, string $controller, string $action): void {
-        $this->routes[$url] = [
-            'controller' => $controller,
-            'action' => $action
-        ];
-    }
+        // Caminho do arquivo do Controller
+        $controllerFile = __DIR__ . '/../controllers/' . $controllerName . '.php';
 
-    public function run(): void {
-        $url = isset($_GET['url']) ? '/' . rtrim($_GET['url'], '/') : '/';
+        if (file_exists($controllerFile)) {
+            require_once $controllerFile;
+            $controller = new $controllerName();
 
-        if (array_key_exists($url, $this->routes)) {
-            $controllerName = $this->routes[$url]['controller'];
-            $actionName = $this->routes[$url]['action'];
-
-            if (class_exists($controllerName)) {
-                $controller = new $controllerName();
-                if (method_exists($controller, $actionName)) {
-                    $controller->$actionName();
-                    return;
-                }
+            if (method_exists($controller, $action)) {
+                unset($url[0], $url[1]);
+                $params = array_values($url);
+                
+                call_user_func_array([$controller, $action], $params);
+                return;
             }
         }
 
-        // Rota não encontrada
-        http_response_code(404);
-        $core = new Controller();
-        $core->view('errors/404');
+        // Se a rota não existir, tenta chamar a página 404
+        if (file_exists(__DIR__ . '/../controllers/HomeController.php')) {
+            require_once __DIR__ . '/../controllers/HomeController.php';
+            $controller = new HomeController();
+            if (method_exists($controller, 'notFound')) {
+                $controller->notFound();
+                return;
+            }
+        }
+
+        echo "Página 404 - Rota não encontrada.";
     }
 }
