@@ -1,13 +1,12 @@
 <?php
 
-class HomeController extends Controller {
-    public function index(): void {
-        $data = ['titulo' => 'Página Inicial - FitManager'];
-        $this->view('home/index', $data);
-    }
+require_once __DIR__ . '/../core/Controller.php';
+require_once __DIR__ . '/../core/Auth.php';
 
-    public function dashboard(): void {
-        $data = ['titulo' => 'Dashboard Administrativo'];
-        $this->view('home/dashboard', $data);
+class HomeController extends Controller {
+    public function index() {
+        Auth::check();
+        header('Location: ' . BASE_URL . '/aluno/index');
+        exit;
     }
 }
