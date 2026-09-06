@@ -3,14 +3,14 @@
 <div class="container my-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Cadastrar Novo Aluno</h2>
-        <a href="<?= BASE_URL ?>/aluno/index" class="btn btn-secondary">Voltar</a>
+        <a href="<?= BASE_URL ?>/alunos" class="btn btn-secondary">Voltar</a>
     </div>
 
     <?php if (isset($erro)): ?>
         <div class="alert alert-danger"><?= $erro ?></div>
     <?php endif; ?>
 
-    <form action="<?= BASE_URL ?>/aluno/store" method="POST" class="card p-4 shadow-sm">
+    <form action="<?= BASE_URL ?>/alunos/store" method="POST" class="card p-4 shadow-sm">
         <div class="mb-3">
             <label for="nome" class="form-label">Nome Completo *</label>
             <input type="text" name="nome" id="nome" class="form-control" required>
