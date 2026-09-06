@@ -31,7 +31,7 @@ class AlunoController extends Controller {
             if ($nome && $email) {
                 if ($this->alunoModel->cadastrar($nome, $email, $telefone, $data_nascimento)) {
                     $_SESSION['sucesso'] = "Aluno cadastrado com sucesso!";
-                    header('Location: ' . BASE_URL . '/aluno/index');
+                    header('Location: ' . BASE_URL . '/alunos');
                     exit;
                 }
             }
@@ -42,14 +42,14 @@ class AlunoController extends Controller {
 
     public function edit($id = null) {
         if (!$id) {
-            header('Location: ' . BASE_URL . '/aluno/index');
+            header('Location: ' . BASE_URL . '/alunos');
             exit;
         }
 
         $aluno = $this->alunoModel->buscarPorId($id);
         if (!$aluno) {
             $_SESSION['erro'] = "Aluno não encontrado.";
-            header('Location: ' . BASE_URL . '/aluno/index');
+            header('Location: ' . BASE_URL . '/alunos');
             exit;
         }
 
@@ -66,13 +66,13 @@ class AlunoController extends Controller {
             if ($nome && $email) {
                 if ($this->alunoModel->atualizar($id, $nome, $email, $telefone, $data_nascimento)) {
                     $_SESSION['sucesso'] = "Dados do aluno atualizados com sucesso!";
-                    header('Location: ' . BASE_URL . '/aluno/index');
+                    header('Location: ' . BASE_URL . '/alunos');
                     exit;
                 }
             }
             $_SESSION['erro'] = "Falha ao atualizar dados. Verifique os campos.";
         }
-        header('Location: ' . BASE_URL . '/aluno/edit/' . $id);
+        header('Location: ' . BASE_URL . '/alunos/edit/' . $id);
         exit;
     }
 
@@ -84,7 +84,7 @@ class AlunoController extends Controller {
         } else {
             $_SESSION['erro'] = "Erro ao tentar remover o aluno.";
         }
-        header('Location: ' . BASE_URL . '/aluno/index');
+        header('Location: ' . BASE_URL . '/alunos');
         exit;
     }
 }
