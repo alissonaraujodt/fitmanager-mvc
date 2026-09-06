@@ -3,8 +3,16 @@
 <div class="container my-3">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Listagem de Alunos</h2>
-        <a href="<?= BASE_URL ?>/aluno/create" class="btn btn-success">+ Novo Aluno</a>
+        <a href="<?= BASE_URL ?>/alunos/create" class="btn btn-success">+ Novo Aluno</a>
     </div>
+
+    <?php if (isset($_SESSION['sucesso'])): ?>
+        <div class="alert alert-success"><?= $_SESSION['sucesso']; unset($_SESSION['sucesso']); ?></div>
+    <?php endif; ?>
+
+    <?php if (isset($_SESSION['erro'])): ?>
+        <div class="alert alert-danger"><?= $_SESSION['erro']; unset($_SESSION['erro']); ?></div>
+    <?php endif; ?>
 
     <div class="card shadow-sm">
         <table class="table table-striped table-hover mb-0">
@@ -28,9 +36,9 @@
                             <td><?= htmlspecialchars($aluno['telefone'] ?? '-') ?></td>
                             <td><?= $aluno['data_nascimento'] ? date('d/m/Y', strtotime($aluno['data_nascimento'])) : '-' ?></td>
                             <td class="text-center">
-                                <a href="<?= BASE_URL ?>/aluno/edit/<?= $aluno['id'] ?>" class="btn btn-warning btn-sm">Editar</a>
+                                <a href="<?= BASE_URL ?>/alunos/edit/<?= $aluno['id'] ?>" class="btn btn-warning btn-sm">Editar</a>
                                 <?php if ($_SESSION['user_perfil'] === 'admin'): ?>
-                                    <a href="<?= BASE_URL ?>/aluno/delete/<?= $aluno['id'] ?>" 
+                                    <a href="<?= BASE_URL ?>/alunos/delete/<?= $aluno['id'] ?>" 
                                        class="btn btn-danger btn-sm" 
                                        onclick="return confirm('Tem certeza que deseja excluir este aluno?');">
                                         Excluir
