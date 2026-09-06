@@ -5,8 +5,15 @@ class Router {
         $url = isset($_GET['url']) ? $_GET['url'] : 'home/index';
         $url = explode('/', filter_var(rtrim($url, '/'), FILTER_SANITIZE_URL));
 
-        // Define o Controller
-        $controllerName = !empty($url[0]) ? ucfirst($url[0]) . 'Controller' : 'HomeController';
+        // Obtém o nome base da rota em minúsculo
+        $route = !empty($url[0]) ? strtolower($url[0]) : 'home';
+
+        // Mapeamento de rotas no plural para o Controller no singular
+        if ($route === 'alunos') {
+            $controllerName = 'AlunoController';
+        } else {
+            $controllerName = ucfirst($route) . 'Controller';
+        }
         
         // Define a Action (método)
         $action = isset($url[1]) && !empty($url[1]) ? $url[1] : 'index';
